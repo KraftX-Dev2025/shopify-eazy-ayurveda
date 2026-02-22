@@ -1,0 +1,524 @@
+
+{%- comment -%}──────────────────────────────────────────────────
+  About Us — Eazy Ayurveda
+  Sections: Hero | Our Story | Values | Ingredients Promise | Founder Note | Trust Badges
+──────────────────────────────────────────────────{%- endcomment -%}
+
+{%- comment -%}─── HERO ───{%- endcomment -%}
+<div
+  class="ea-about-hero"
+  {% if section.settings.hero_image %}
+    style="background-image: url('{{ section.settings.hero_image | image_url: width: 1600 }}')"
+  {% endif %}
+>
+  <div class="ea-about-hero__overlay"></div>
+  <div class="ea-about-hero__content">
+    <p class="ea-about-hero__eyebrow">Est. with Purpose</p>
+    <h1 class="ea-about-hero__heading">Ancient Wisdom.<br>Modern Wellness.</h1>
+  </div>
+</div>
+
+{%- comment -%}─── OUR STORY ───{%- endcomment -%}
+<section class="ea-about-story">
+  <div class="ea-about-story__inner">
+    <div class="ea-about-story__text">
+      <h2 class="ea-about-story__heading">Born from Nature,<br>Backed by Tradition</h2>
+      <p class="ea-about-story__body">
+        Eazy Ayurveda was founded with a simple belief — that ancient Ayurvedic wisdom
+        should be accessible to every Indian family. Our formulations follow classical texts
+        and techniques as described by Shri Bajrangdasji Maharaj (Harda wasi), using only
+        certified herbs sourced directly from Ayurvedic farms across India.
+      </p>
+    </div>
+    <div class="ea-about-story__media">
+      {% if section.settings.story_image %}
+        {{ section.settings.story_image
+          | image_url: width: 800
+          | image_tag:
+            class: 'ea-about-story__img',
+            alt: 'Our Story — Eazy Ayurveda',
+            width: 800,
+            height: 1000,
+            loading: 'lazy'
+        }}
+      {% else %}
+        <div class="ea-about-story__placeholder">
+          <span class="ea-about-story__placeholder-icon" aria-hidden="true">🌿</span>
+          <p class="ea-about-story__placeholder-label">Ayurvedic Herbs</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{%- comment -%}─── THREE VALUES STRIP ───{%- endcomment -%}
+<section class="ea-about-values">
+  <div class="ea-about-values__inner">
+    <div class="ea-about-values__card">
+      <span class="ea-about-values__icon" aria-hidden="true">🌿</span>
+      <h3 class="ea-about-values__title">100% Natural</h3>
+      <p class="ea-about-values__desc">No chemicals, no shortcuts</p>
+    </div>
+    <div class="ea-about-values__card">
+      <span class="ea-about-values__icon" aria-hidden="true">📜</span>
+      <h3 class="ea-about-values__title">Classical Formulations</h3>
+      <p class="ea-about-values__desc">Rooted in ancient Ayurvedic texts</p>
+    </div>
+    <div class="ea-about-values__card">
+      <span class="ea-about-values__icon" aria-hidden="true">🏡</span>
+      <h3 class="ea-about-values__title">Family Safe</h3>
+      <p class="ea-about-values__desc">Trusted by families across India</p>
+    </div>
+  </div>
+</section>
+
+{%- comment -%}─── INGREDIENTS PROMISE ───{%- endcomment -%}
+<section class="ea-about-promise">
+  <div class="ea-about-promise__inner">
+    <p class="ea-about-promise__eyebrow">Our Commitment</p>
+    <h2 class="ea-about-promise__heading">Every Ingredient Has a Purpose</h2>
+    <p class="ea-about-promise__body">
+      We source directly from certified Ayurvedic herb farms.<br>
+      No fillers. No artificial additives. Just pure, potent herbs.
+    </p>
+  </div>
+</section>
+
+{%- comment -%}─── FOUNDER NOTE ───{%- endcomment -%}
+<section class="ea-about-founder">
+  <div class="ea-about-founder__inner">
+    <div class="ea-about-founder__leaf" aria-hidden="true">🍃</div>
+    <blockquote class="ea-about-founder__quote">
+      <p class="ea-about-founder__text">
+        "We started Eazy Ayurveda because we believe every family
+        deserves access to authentic Ayurvedic healing — simple, safe and effective."
+      </p>
+      <footer class="ea-about-founder__footer">
+        <cite class="ea-about-founder__cite">— Team Eazy Ayurveda, Pune</cite>
+      </footer>
+    </blockquote>
+  </div>
+</section>
+
+{%- comment -%}─── TRUST BADGES ───{%- endcomment -%}
+<section class="ea-about-badges">
+  <div class="ea-about-badges__inner">
+    <div class="ea-about-badges__badge">
+      <span class="ea-about-badges__icon" aria-hidden="true">✅</span>
+      <span class="ea-about-badges__label">FSSAI Certified</span>
+    </div>
+    <div class="ea-about-badges__badge">
+      <span class="ea-about-badges__icon" aria-hidden="true">🌿</span>
+      <span class="ea-about-badges__label">100% Natural</span>
+    </div>
+    <div class="ea-about-badges__badge">
+      <span class="ea-about-badges__icon" aria-hidden="true">🚫</span>
+      <span class="ea-about-badges__label">No Chemicals</span>
+    </div>
+    <div class="ea-about-badges__badge">
+      <span class="ea-about-badges__icon" aria-hidden="true">📦</span>
+      <span class="ea-about-badges__label">Free Shipping ₹499+</span>
+    </div>
+    <div class="ea-about-badges__badge">
+      <span class="ea-about-badges__icon" aria-hidden="true">💚</span>
+      <span class="ea-about-badges__label">Family Safe</span>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  /* ─── HERO ─── */
+  .ea-about-hero {
+    position: relative;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a3a2a;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+  }
+
+  .ea-about-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(16, 42, 28, 0.50) 0%,
+      rgba(16, 42, 28, 0.75) 55%,
+      rgba(10, 28, 18, 0.92) 100%
+    );
+    z-index: 1;
+  }
+
+  .ea-about-hero__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    max-width: 820px;
+  }
+
+  .ea-about-hero__eyebrow {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 232, 0.65);
+    margin-block-end: 1.5rem;
+    margin-block-start: 0;
+  }
+
+  .ea-about-hero__heading {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(3rem, 6.5vw, 6rem);
+    font-weight: 400;
+    color: #f5f0e8;
+    line-height: 1.08;
+    letter-spacing: 0.03em;
+    margin: 0;
+  }
+
+  /* ─── OUR STORY ─── */
+  .ea-about-story {
+    padding-block: 7rem;
+    padding-inline: 1.5rem;
+    background-color: #ffffff;
+  }
+
+  .ea-about-story__inner {
+    max-width: 1200px;
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .ea-about-story__heading {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 400;
+    color: #1a3a2a;
+    line-height: 1.2;
+    letter-spacing: 0.03em;
+    margin-block-start: 0;
+    margin-block-end: 1.75rem;
+  }
+
+  .ea-about-story__body {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.025rem;
+    font-weight: 300;
+    color: #4a5a50;
+    line-height: 1.85;
+    margin: 0;
+  }
+
+  .ea-about-story__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    aspect-ratio: 4 / 5;
+    display: block;
+  }
+
+  .ea-about-story__placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    background-color: #e8f0ea;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .ea-about-story__placeholder-icon {
+    font-size: 4.5rem;
+    line-height: 1;
+  }
+
+  .ea-about-story__placeholder-label {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #1a3a2a;
+    letter-spacing: 0.05em;
+    margin: 0;
+  }
+
+  /* ─── VALUES STRIP ─── */
+  .ea-about-values {
+    padding-block: 5.5rem;
+    padding-inline: 1.5rem;
+    background-color: #fdf8f2;
+  }
+
+  .ea-about-values__inner {
+    max-width: 1200px;
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+  }
+
+  .ea-about-values__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2.75rem 2rem;
+    background-color: #ffffff;
+    border-radius: 10px;
+    border: 1px solid rgba(26, 58, 42, 0.1);
+    box-shadow: 0 2px 16px rgba(26, 58, 42, 0.06);
+    gap: 0.65rem;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .ea-about-values__card:hover {
+    box-shadow: 0 6px 28px rgba(26, 58, 42, 0.12);
+    transform: translateY(-3px);
+  }
+
+  .ea-about-values__icon {
+    font-size: 2.5rem;
+    line-height: 1;
+  }
+
+  .ea-about-values__title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: #1a3a2a;
+    letter-spacing: 0.02em;
+    margin: 0;
+  }
+
+  .ea-about-values__desc {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: #6b7c70;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ─── INGREDIENTS PROMISE ─── */
+  .ea-about-promise {
+    padding-block: 7rem;
+    padding-inline: 1.5rem;
+    background-color: #1a3a2a;
+  }
+
+  .ea-about-promise__inner {
+    max-width: 720px;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .ea-about-promise__eyebrow {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 232, 0.5);
+    margin-block-start: 0;
+    margin-block-end: 1.25rem;
+  }
+
+  .ea-about-promise__heading {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 400;
+    color: #f5f0e8;
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+    margin-block-start: 0;
+    margin-block-end: 1.75rem;
+  }
+
+  .ea-about-promise__body {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 300;
+    color: rgba(245, 240, 232, 0.78);
+    line-height: 1.9;
+    margin: 0;
+  }
+
+  /* ─── FOUNDER NOTE ─── */
+  .ea-about-founder {
+    padding-block: 7rem;
+    padding-inline: 1.5rem;
+    background-color: #ffffff;
+  }
+
+  .ea-about-founder__inner {
+    max-width: 720px;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .ea-about-founder__leaf {
+    font-size: 2rem;
+    margin-block-end: 1.75rem;
+    opacity: 0.7;
+  }
+
+  .ea-about-founder__quote {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  .ea-about-founder__text {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(1.45rem, 2.5vw, 2.1rem);
+    font-weight: 400;
+    font-style: italic;
+    color: #1a3a2a;
+    line-height: 1.65;
+    margin-block-start: 0;
+    margin-block-end: 2rem;
+  }
+
+  .ea-about-founder__footer {
+    display: block;
+  }
+
+  .ea-about-founder__cite {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #5a6a5e;
+    font-style: normal;
+  }
+
+  /* ─── TRUST BADGES ─── */
+  .ea-about-badges {
+    padding-block: 4.5rem;
+    padding-inline: 1.5rem;
+    background-color: #fdf8f2;
+    border-top: 1px solid rgba(26, 58, 42, 0.1);
+  }
+
+  .ea-about-badges__inner {
+    max-width: 1100px;
+    margin-inline: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 2.5rem 3rem;
+  }
+
+  .ea-about-badges__badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 100px;
+  }
+
+  .ea-about-badges__icon {
+    font-size: 1.85rem;
+    line-height: 1;
+  }
+
+  .ea-about-badges__label {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #1a3a2a;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media screen and (max-width: 989px) {
+    .ea-about-story__inner {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .ea-about-story__media {
+      order: -1;
+    }
+
+    .ea-about-story__img,
+    .ea-about-story__placeholder {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ea-about-hero {
+      min-height: 65vh;
+    }
+
+    .ea-about-story,
+    .ea-about-promise,
+    .ea-about-founder {
+      padding-block: 4.5rem;
+    }
+
+    .ea-about-values {
+      padding-block: 4rem;
+    }
+
+    .ea-about-values__inner {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .ea-about-values__card {
+      padding: 2rem 1.5rem;
+    }
+
+    .ea-about-badges__inner {
+      gap: 2rem 2rem;
+    }
+
+    .ea-about-badges__badge {
+      min-width: 80px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "About Us",
+  "tag": "div",
+  "class": "ea-about-page",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Background Image",
+      "info": "Recommended: 1600×900px or wider. Landscape orientation."
+    },
+    {
+      "type": "image_picker",
+      "id": "story_image",
+      "label": "Our Story Image",
+      "info": "Recommended: portrait orientation (4:5 ratio)."
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Us"
+    }
+  ]
+}
+{% endschema %}

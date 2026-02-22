@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "page_about_ea": {
+      "type": "page-about",
+      "settings": {}
+    }
+  },
+  "order": [
+    "page_about_ea"
+  ]
+}
