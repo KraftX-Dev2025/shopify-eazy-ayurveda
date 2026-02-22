@@ -149,7 +149,7 @@
         "vertical_alignment_flex_direction_column": "flex-end",
         "gap": 0,
         "section_width": "page-width",
-        "section_height": "large",
+        "section_height": "full-screen",
         "section_height_custom": 5,
         "color_scheme": "scheme-2",
         "toggle_overlay": true,
@@ -428,7 +428,7 @@
       },
       "name": "t:names.products_grid",
       "settings": {
-        "collection": "other-example-products",
+        "collection": "all",
         "layout_type": "grid",
         "carousel_on_mobile": false,
         "max_products": 6,
