@@ -1,0 +1,254 @@
+
+<div class="ea-cat-bg"></div>
+
+<div class="ea-cat section--{{ section.settings.section_width }}" style="padding-block-start: {{ section.settings.padding_top }}px; padding-block-end: {{ section.settings.padding_bottom }}px;">
+  <div class="ea-cat__inner">
+    {% if section.settings.heading != blank %}
+      <h2 class="ea-cat__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="ea-cat__grid">
+      {% for block in section.blocks %}
+        <a
+          href="{{ block.settings.link | default: '#' }}"
+          class="ea-cat__tile"
+          {{ block.shopify_attributes }}
+        >
+          <span class="ea-cat__icon" aria-hidden="true">{{ block.settings.icon }}</span>
+          <span class="ea-cat__name">{{ block.settings.name }}</span>
+          <span class="ea-cat__cta">Shop Now →</span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .ea-cat-bg {
+    background-color: #1a3a2a;
+    position: relative;
+  }
+
+  .ea-cat {
+    background-color: #1a3a2a;
+    color: #f5f0e8;
+  }
+
+  .ea-cat__inner {
+    max-width: var(--page-width, 1200px);
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  .ea-cat__heading {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 400;
+    color: #f5f0e8;
+    text-align: center;
+    letter-spacing: 0.04em;
+    margin-block-end: 2.5rem;
+  }
+
+  .ea-cat__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+  }
+
+  .ea-cat__tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 2rem 1rem;
+    background-color: rgba(245, 240, 232, 0.07);
+    border: 1px solid rgba(245, 240, 232, 0.15);
+    border-radius: 8px;
+    text-decoration: none;
+    color: #f5f0e8;
+    transition: transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+    text-align: center;
+  }
+
+  .ea-cat__tile:hover {
+    transform: scale(1.04);
+    background-color: rgba(245, 240, 232, 0.15);
+    border-color: rgba(245, 240, 232, 0.35);
+    color: #f5f0e8;
+  }
+
+  .ea-cat__icon {
+    font-size: 2.25rem;
+    line-height: 1;
+  }
+
+  .ea-cat__name {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: #f5f0e8;
+  }
+
+  .ea-cat__cta {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 232, 0.65);
+    transition: color 0.2s ease;
+  }
+
+  .ea-cat__tile:hover .ea-cat__cta {
+    color: #f5f0e8;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ea-cat__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ea-cat__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ea-cat__tile {
+      padding: 1.5rem 0.75rem;
+    }
+
+    .ea-cat__icon {
+      font-size: 1.75rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Category Tiles",
+  "class": "ea-category-tiles-section",
+  "tag": "section",
+  "max_blocks": 10,
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Category Tile",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon (emoji)",
+          "default": "🌿"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Category Name",
+          "default": "Category"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Shop By Category"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width", "label": "Page" },
+        { "value": "full-width", "label": "Full" }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category Tiles",
+      "blocks": {
+        "tile_immunity": {
+          "type": "tile",
+          "settings": {
+            "icon": "🛡️",
+            "name": "Immunity",
+            "link": "/collections/all"
+          }
+        },
+        "tile_digestion": {
+          "type": "tile",
+          "settings": {
+            "icon": "🌱",
+            "name": "Digestion",
+            "link": "/collections/all"
+          }
+        },
+        "tile_respiratory": {
+          "type": "tile",
+          "settings": {
+            "icon": "🌬️",
+            "name": "Respiratory",
+            "link": "/collections/all"
+          }
+        },
+        "tile_diabetes": {
+          "type": "tile",
+          "settings": {
+            "icon": "🩸",
+            "name": "Diabetes",
+            "link": "/collections/all"
+          }
+        },
+        "tile_wellness": {
+          "type": "tile",
+          "settings": {
+            "icon": "✨",
+            "name": "General Wellness",
+            "link": "/collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "tile_immunity",
+        "tile_digestion",
+        "tile_respiratory",
+        "tile_diabetes",
+        "tile_wellness"
+      ]
+    }
+  ]
+}
+{% endschema %}

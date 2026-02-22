@@ -162,6 +162,75 @@
         "padding-block-end": 64
       }
     },
+    "category_tiles_ea": {
+      "type": "category-tiles",
+      "blocks": {
+        "tile_immunity": {
+          "type": "tile",
+          "settings": {
+            "icon": "🛡️",
+            "name": "Immunity",
+            "link": "/collections/all"
+          }
+        },
+        "tile_digestion": {
+          "type": "tile",
+          "settings": {
+            "icon": "🌱",
+            "name": "Digestion",
+            "link": "/collections/all"
+          }
+        },
+        "tile_respiratory": {
+          "type": "tile",
+          "settings": {
+            "icon": "🌬️",
+            "name": "Respiratory",
+            "link": "/collections/all"
+          }
+        },
+        "tile_diabetes": {
+          "type": "tile",
+          "settings": {
+            "icon": "🩸",
+            "name": "Diabetes",
+            "link": "/collections/all"
+          }
+        },
+        "tile_wellness": {
+          "type": "tile",
+          "settings": {
+            "icon": "✨",
+            "name": "General Wellness",
+            "link": "/collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "tile_immunity",
+        "tile_digestion",
+        "tile_respiratory",
+        "tile_diabetes",
+        "tile_wellness"
+      ],
+      "settings": {
+        "heading": "Shop By Category",
+        "section_width": "full-width",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "bestsellers_carousel_ea": {
+      "type": "bestsellers-carousel",
+      "settings": {
+        "heading": "Loved By Customers",
+        "subheading": "India's most trusted Ayurvedic remedies",
+        "collection": "all",
+        "max_products": 8,
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
     "marquee_ayurveda": {
       "type": "marquee",
       "blocks": {
@@ -785,6 +854,8 @@
   },
   "order": [
     "hero_p9CmMG",
+    "category_tiles_ea",
+    "bestsellers_carousel_ea",
     "marquee_ayurveda",
     "product_list_themegen",
     "hero_w7HaTj",
