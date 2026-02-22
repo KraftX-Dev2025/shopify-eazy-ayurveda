@@ -1,0 +1,96 @@
+/* =====================================================
+   Eazy Ayurveda — Luxury Hero Enhancement
+   Scoped to the first hero section on the page.
+   ===================================================== */
+
+/* --- Fade-up entrance animation --- */
+@keyframes ea-hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 1. Full viewport height -------------------------------- */
+.hero-wrapper:first-child .hero {
+  --hero-min-height: 100svh;
+}
+
+/* 2. Cinematic gradient overlay — transparent top, deep shadow bottom */
+.hero-wrapper:first-child .hero__media-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.76) 0%,
+    rgba(0, 0, 0, 0.28) 45%,
+    transparent 100%
+  );
+  z-index: 1;
+}
+
+/* 3. Content fade-in on page load ----------------------- */
+.hero-wrapper:first-child .hero__content-wrapper {
+  animation: ea-hero-fade-up 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.1s both;
+}
+
+/* 4. Serif headline with elegant letter spacing ---------- */
+.hero-wrapper:first-child .hero__content-wrapper h1,
+.hero-wrapper:first-child .hero__content-wrapper h2 {
+  font-family: var(--font-heading--family, Georgia, serif);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  line-height: 1.08;
+}
+
+/* 5. Subheading — light weight, airy -------------------- */
+.hero-wrapper:first-child .hero__content-wrapper p,
+.hero-wrapper:first-child .hero__content-wrapper .rte p {
+  font-weight: 300;
+  letter-spacing: 0.025em;
+  opacity: 0.85;
+}
+
+/* 6. Outlined white CTA button with hover fill ---------- */
+.hero-wrapper:first-child .hero__content-wrapper .button {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  padding: 0.9rem 2.5rem;
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}
+
+.hero-wrapper:first-child .hero__content-wrapper .button:hover,
+.hero-wrapper:first-child .hero__content-wrapper .button:focus-visible {
+  background-color: #ffffff;
+  color: #1c1c1c;
+  border-color: #ffffff;
+}
+
+/* 7. Mobile — content pinned to bottom-center ----------- */
+@media screen and (max-width: 749px) {
+  .hero-wrapper:first-child .hero__container {
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 2.5rem;
+  }
+
+  .hero-wrapper:first-child .hero__content-wrapper {
+    align-items: center;
+  }
+
+  .hero-wrapper:first-child .hero__content-wrapper h1,
+  .hero-wrapper:first-child .hero__content-wrapper h2,
+  .hero-wrapper:first-child .hero__content-wrapper p {
+    text-align: center;
+  }
+}
