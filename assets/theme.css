@@ -1,9 +1,22 @@
 /* =====================================================
-   Eazy Ayurveda — Luxury Hero Enhancement
-   Scoped to the first hero section on the page.
+   Eazy Ayurveda — Theme Enhancement
    ===================================================== */
 
-/* --- Fade-up entrance animation --- */
+/* =====================================================
+   4. TYPOGRAPHY — Override Horizon font CSS variables
+   (Google Fonts loaded via snippets/fonts.liquid)
+   ===================================================== */
+:root {
+  --font-heading--family: 'Cormorant Garamond', Georgia, serif;
+  --font-subheading--family: 'Cormorant Garamond', Georgia, serif;
+  --font-body--family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-accent--family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* =====================================================
+   1. HERO — Full viewport, cinematic gradient, serif headline
+   ===================================================== */
+
 @keyframes ea-hero-fade-up {
   from {
     opacity: 0;
@@ -15,12 +28,12 @@
   }
 }
 
-/* 1. Full viewport height -------------------------------- */
+/* Force 100svh regardless of section height setting */
 .hero-wrapper:first-child .hero {
   --hero-min-height: 100svh;
 }
 
-/* 2. Cinematic gradient overlay — transparent top, deep shadow bottom */
+/* Cinematic gradient — deep darkness at bottom, transparent at top */
 .hero-wrapper:first-child .hero__media-wrapper::after {
   content: '';
   position: absolute;
@@ -28,42 +41,46 @@
   pointer-events: none;
   background: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.76) 0%,
-    rgba(0, 0, 0, 0.28) 45%,
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(0, 0, 0, 0.45) 38%,
+    rgba(0, 0, 0, 0.12) 65%,
     transparent 100%
   );
   z-index: 1;
 }
 
-/* 3. Content fade-in on page load ----------------------- */
+/* Fade-up on load */
 .hero-wrapper:first-child .hero__content-wrapper {
   animation: ea-hero-fade-up 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.1s both;
 }
 
-/* 4. Serif headline with elegant letter spacing ---------- */
+/* Large serif headline with clamp */
 .hero-wrapper:first-child .hero__content-wrapper h1,
 .hero-wrapper:first-child .hero__content-wrapper h2 {
-  font-family: var(--font-heading--family, Georgia, serif);
+  font-family: 'Cormorant Garamond', Georgia, serif;
   font-weight: 400;
-  letter-spacing: 0.05em;
-  line-height: 1.08;
+  font-size: clamp(3rem, 6vw, 6rem);
+  letter-spacing: 0.04em;
+  line-height: 1.05;
 }
 
-/* 5. Subheading — light weight, airy -------------------- */
+/* Subheading — light, airy */
 .hero-wrapper:first-child .hero__content-wrapper p,
 .hero-wrapper:first-child .hero__content-wrapper .rte p {
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 300;
   letter-spacing: 0.025em;
-  opacity: 0.85;
+  opacity: 0.88;
 }
 
-/* 6. Outlined white CTA button with hover fill ---------- */
+/* Outlined white CTA */
 .hero-wrapper:first-child .hero__content-wrapper .button {
   background-color: transparent;
   color: #ffffff;
   border: 1.5px solid rgba(255, 255, 255, 0.8);
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 0.8rem;
   padding: 0.9rem 2.5rem;
   transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
@@ -76,7 +93,7 @@
   border-color: #ffffff;
 }
 
-/* 7. Mobile — content pinned to bottom-center ----------- */
+/* Mobile: stack bottom-center */
 @media screen and (max-width: 749px) {
   .hero-wrapper:first-child .hero__container {
     align-items: flex-end;
@@ -93,4 +110,143 @@
   .hero-wrapper:first-child .hero__content-wrapper p {
     text-align: center;
   }
+
+  .hero-wrapper:first-child .hero__content-wrapper h1,
+  .hero-wrapper:first-child .hero__content-wrapper h2 {
+    font-size: clamp(2.5rem, 10vw, 4rem);
+  }
+}
+
+/* =====================================================
+   2. MARQUEE STRIP — Earthy green on cream
+   Scoped via .ea-marquee-strip class added to section schema
+   ===================================================== */
+.ea-marquee-strip .section-background {
+  background-color: #f5f0e8 !important;
+}
+
+.ea-marquee-strip marquee-component {
+  background-color: #f5f0e8 !important;
+  border-top: 1px solid rgba(45, 80, 22, 0.18);
+  border-bottom: 1px solid rgba(45, 80, 22, 0.18);
+}
+
+.ea-marquee-strip .marquee__content *,
+.ea-marquee-strip .marquee__repeated-items * {
+  color: #2d5016 !important;
+  font-family: 'Inter', system-ui, sans-serif !important;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+}
+
+/* =====================================================
+   3. FEATURED PRODUCTS — Clean 3-col cards
+   ===================================================== */
+.ea-product-atc-btn {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 0.65rem 1rem;
+  background-color: transparent;
+  color: inherit;
+  border: 1px solid currentColor;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.ea-product-atc-btn:hover {
+  background-color: #1a3a2a;
+  border-color: #1a3a2a;
+  color: #ffffff;
+}
+
+/* =====================================================
+   5. FOOTER — Dark green background, white text
+   .shopify-section-group-footer-group is added by Shopify
+   to every section inside the footer section group
+   ===================================================== */
+.shopify-section-group-footer-group .section-background {
+  background-color: #1a3a2a !important;
+}
+
+.shopify-section-group-footer-group .section,
+.shopify-section-group-footer-group footer {
+  background-color: #1a3a2a !important;
+  color: #ffffff !important;
+}
+
+.shopify-section-group-footer-group,
+.shopify-section-group-footer-group .footer-content {
+  background-color: #1a3a2a;
+  color: #ffffff;
+}
+
+.shopify-section-group-footer-group p,
+.shopify-section-group-footer-group span,
+.shopify-section-group-footer-group li,
+.shopify-section-group-footer-group h1,
+.shopify-section-group-footer-group h2,
+.shopify-section-group-footer-group h3,
+.shopify-section-group-footer-group h4,
+.shopify-section-group-footer-group h5,
+.shopify-section-group-footer-group h6 {
+  color: #ffffff !important;
+}
+
+.shopify-section-group-footer-group a {
+  color: rgba(255, 255, 255, 0.75) !important;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.shopify-section-group-footer-group a:hover {
+  color: #ffffff !important;
+}
+
+.shopify-section-group-footer-group input,
+.shopify-section-group-footer-group textarea {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.shopify-section-group-footer-group input::placeholder,
+.shopify-section-group-footer-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.shopify-section-group-footer-group .button,
+.shopify-section-group-footer-group .button-secondary {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  color: #ffffff !important;
+}
+
+.shopify-section-group-footer-group .button:hover,
+.shopify-section-group-footer-group .button-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.22) !important;
+}
+
+/* SVG icons */
+.shopify-section-group-footer-group svg path,
+.shopify-section-group-footer-group svg circle,
+.shopify-section-group-footer-group svg rect,
+.shopify-section-group-footer-group svg polyline,
+.shopify-section-group-footer-group svg line {
+  stroke: rgba(255, 255, 255, 0.75) !important;
+  fill: none !important;
+}
+
+.shopify-section-group-footer-group svg [fill]:not([fill="none"]) {
+  fill: rgba(255, 255, 255, 0.75) !important;
 }

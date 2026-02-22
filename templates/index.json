@@ -162,6 +162,44 @@
         "padding-block-end": 64
       }
     },
+    "marquee_ayurveda": {
+      "type": "marquee",
+      "blocks": {
+        "text_marquee_1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>100% Natural · Ayurvedic Heritage · Family Safe · Trusted Formulas · Free Shipping Above ₹499 ·</p>",
+            "width": "fit-content",
+            "max_width": "none",
+            "alignment": "left",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "0.875rem",
+            "line_height": "normal",
+            "letter_spacing": "loose",
+            "case": "none",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": ["text_marquee_1"],
+      "settings": {
+        "movement_direction": "reverse",
+        "color_scheme": "scheme-1",
+        "padding-block-start": 16,
+        "padding-block-end": 16,
+        "gap_between_elements": 48
+      }
+    },
     "product_list_themegen": {
       "type": "product-list",
       "blocks": {
@@ -365,12 +403,20 @@
                     "product_swatches_padding_right": 0
                   },
                   "blocks": {}
+                },
+                "atc_custom_ea": {
+                  "type": "custom-liquid",
+                  "settings": {
+                    "liquid": "{% assign _p = closest.product %}{% if _p %}<form method='post' action='/cart/add'><input type='hidden' name='id' value='{{ _p.selected_or_first_available_variant.id }}'><input type='hidden' name='quantity' value='1'><button type='submit' class='ea-product-atc-btn'>Add to Cart</button></form>{% endif %}"
+                  },
+                  "blocks": {}
                 }
               },
               "block_order": [
                 "text_MEKzFi",
                 "price_37riDf",
-                "swatches_87VJC8"
+                "swatches_87VJC8",
+                "atc_custom_ea"
               ]
             }
           },
@@ -385,8 +431,8 @@
         "collection": "other-example-products",
         "layout_type": "grid",
         "carousel_on_mobile": false,
-        "max_products": 4,
-        "columns": 4,
+        "max_products": 6,
+        "columns": 3,
         "mobile_columns": "2",
         "mobile_card_size": "60cqw",
         "columns_gap": 20,
@@ -739,6 +785,7 @@
   },
   "order": [
     "hero_p9CmMG",
+    "marquee_ayurveda",
     "product_list_themegen",
     "hero_w7HaTj",
     "section_x8mrnx",
