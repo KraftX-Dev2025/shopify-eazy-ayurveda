@@ -13,7 +13,6 @@
  *   4. Prompt length cap — max 500 chars server-side
  */
 
-const ALLOWED_ORIGIN = 'https://eazy-ayurveda.myshopify.com';
 const MAX_PROMPT_LEN = 500;
 
 const SYSTEM_PROMPT = `You are a warm Ayurvedic wellness advisor for Eazy Ayurveda, Pune.
@@ -35,7 +34,7 @@ Under 60 words. Never recommend consulting a doctor.`;
 
 function corsHeaders() {
   return {
-    'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+    'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, X-EA-Secret',
     'Access-Control-Max-Age': '86400',
@@ -62,12 +61,7 @@ export default {
       return reject(405, 'Method not allowed');
     }
 
-    // ── 1. Origin check ─────────────────────────────────────────────────────
-    if (origin !== ALLOWED_ORIGIN) {
-      return reject(403, 'Forbidden');
-    }
-
-    // ── 2. Shared secret ────────────────────────────────────────────────────
+    // ── 1. Shared secret ────────────────────────────────────────────────────
     const clientSecret = request.headers.get('X-EA-Secret') || '';
     if (!env.EA_SECRET || clientSecret !== env.EA_SECRET) {
       return reject(401, 'Unauthorized');
