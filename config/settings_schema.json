@@ -2303,6 +2303,12 @@
         "id": "ea_claude_api_key",
         "label": "Claude API Key (dev only)",
         "info": "⚠️ Visible in page source. Use proxy URL for production."
+      },
+      {
+        "type": "text",
+        "id": "ea_request_secret",
+        "label": "Request Secret Token",
+        "info": "Must match the EA_SECRET set in your Cloudflare Worker. Blocks bots without this token."
       }
     ]
   }

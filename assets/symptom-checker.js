@@ -115,9 +115,11 @@ async function callClaude(symptoms) {
 
   // ── Via proxy (recommended) ──────────────────────────────────────────────
   if (proxyUrl) {
+    const headers = { 'Content-Type': 'application/json' };
+    if (window.eaSecret) headers['X-EA-Secret'] = window.eaSecret;
     const res = await fetch(proxyUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({ prompt: symptoms }),
     });
     if (!res.ok) throw new Error(`Proxy error ${res.status}`);

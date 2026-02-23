@@ -2,17 +2,19 @@
  * Eazy Ayurveda — Claude Proxy Worker
  * Deployed on Cloudflare Workers (free tier).
  *
- * Secrets (set via: npx wrangler secret put ANTHROPIC_API_KEY):
- *   ANTHROPIC_API_KEY — your Anthropic API key
+ * Secrets (set via wrangler secret put):
+ *   ANTHROPIC_API_KEY — Anthropic API key
+ *   EA_SECRET         — shared token sent by the Shopify page
  *
- * CORS: allows requests from eazy-ayurveda.myshopify.com only.
+ * Protection layers:
+ *   1. Origin lock — only eazy-ayurveda.myshopify.com
+ *   2. Shared secret header — X-EA-Secret must match EA_SECRET
+ *   3. Rate limiting — 10 requests / 60 s per IP (Cloudflare native)
+ *   4. Prompt length cap — max 500 chars server-side
  */
 
-const ALLOWED_ORIGINS = [
-  'https://eazy-ayurveda.myshopify.com',
-  'https://eazyayurveda.com',
-  // add your custom domain here if you have one
-];
+const ALLOWED_ORIGIN = 'https://eazy-ayurveda.myshopify.com';
+const MAX_PROMPT_LEN = 500;
 
 const SYSTEM_PROMPT = `You are a warm Ayurvedic wellness advisor for Eazy Ayurveda, Pune.
 Recommend ONE product based on symptoms from this list:
@@ -31,49 +33,70 @@ WHY: [one warm sentence why this helps them]
 DOSAGE: [brief dosage]
 Under 60 words. Never recommend consulting a doctor.`;
 
-function corsHeaders(origin) {
-  const allowed = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+function corsHeaders() {
   return {
-    'Access-Control-Allow-Origin': allowed,
+    'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, X-EA-Secret',
     'Access-Control-Max-Age': '86400',
   };
 }
 
+function reject(status, message, extraHeaders = {}) {
+  return new Response(JSON.stringify({ error: message }), {
+    status,
+    headers: { 'Content-Type': 'application/json', ...corsHeaders(), ...extraHeaders },
+  });
+}
+
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const origin = request.headers.get('Origin') || '';
 
-    // Handle CORS preflight
+    // ── CORS preflight ──────────────────────────────────────────────────────
     if (request.method === 'OPTIONS') {
-      return new Response(null, {
-        status: 204,
-        headers: corsHeaders(origin),
-      });
+      return new Response(null, { status: 204, headers: corsHeaders() });
     }
 
     if (request.method !== 'POST') {
-      return new Response('Method not allowed', { status: 405 });
+      return reject(405, 'Method not allowed');
     }
 
+    // ── 1. Origin check ─────────────────────────────────────────────────────
+    if (origin !== ALLOWED_ORIGIN) {
+      return reject(403, 'Forbidden');
+    }
+
+    // ── 2. Shared secret ────────────────────────────────────────────────────
+    const clientSecret = request.headers.get('X-EA-Secret') || '';
+    if (!env.EA_SECRET || clientSecret !== env.EA_SECRET) {
+      return reject(401, 'Unauthorized');
+    }
+
+    // ── 3. Rate limiting (10 req / 60 s per IP) ─────────────────────────────
+    if (env.EA_RATE_LIMITER) {
+      const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+      const { success } = await env.EA_RATE_LIMITER.limit({ key: ip });
+      if (!success) {
+        return reject(429, 'Too many requests. Please wait a moment.', {
+          'Retry-After': '60',
+        });
+      }
+    }
+
+    // ── 4. Parse + validate body ────────────────────────────────────────────
     let prompt;
     try {
       const body = await request.json();
-      prompt = body?.prompt?.trim();
-      if (!prompt) throw new Error('Missing prompt');
+      prompt = (body?.prompt || '').trim().slice(0, MAX_PROMPT_LEN);
+      if (!prompt) throw new Error('Empty prompt');
     } catch {
-      return new Response(JSON.stringify({ error: 'Invalid request body' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) },
-      });
+      return reject(400, 'Invalid request body');
     }
 
+    // ── 5. Call Anthropic ───────────────────────────────────────────────────
     if (!env.ANTHROPIC_API_KEY) {
-      return new Response(JSON.stringify({ error: 'API key not configured' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) },
-      });
+      return reject(500, 'API key not configured');
     }
 
     try {
@@ -95,24 +118,18 @@ export default {
       if (!response.ok) {
         const err = await response.text();
         console.error('Anthropic error:', err);
-        return new Response(JSON.stringify({ error: 'Upstream error', status: response.status }), {
-          status: 502,
-          headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) },
-        });
+        return reject(502, 'Upstream error');
       }
 
       const data = await response.json();
       return new Response(JSON.stringify(data), {
         status: 200,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) },
+        headers: { 'Content-Type': 'application/json', ...corsHeaders() },
       });
 
     } catch (err) {
       console.error('Worker error:', err);
-      return new Response(JSON.stringify({ error: 'Internal error' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) },
-      });
+      return reject(500, 'Internal error');
     }
   },
 };

@@ -11,6 +11,7 @@
   "current": {
     "ea_claude_proxy_url": "https://eazy-ayurveda-claude-proxy.hello-brightsolutions.workers.dev",
     "ea_claude_api_key": "",
+    "ea_request_secret": "28a2fae5894730d81e323b55e9cc9a93b66cab8de8d41f55",
     "logo": "shopify://shop_images/1.png",
     "logo_inverse": "shopify://shop_images/1.png",
     "logo_height": 45,

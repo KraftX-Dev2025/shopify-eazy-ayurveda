@@ -5,8 +5,9 @@
 {%- endcomment -%}
 
 <script>
-  window.eaProxyUrl  = {{ settings.ea_claude_proxy_url | default: '' | json }};
-  window.eaApiKey   = {{ settings.ea_claude_api_key    | default: '' | json }};
+  window.eaProxyUrl = {{ settings.ea_claude_proxy_url | default: '' | json }};
+  window.eaApiKey   = {{ settings.ea_claude_api_key   | default: '' | json }};
+  window.eaSecret   = {{ settings.ea_request_secret   | default: '' | json }};
 </script>
 
 {%- comment -%}─── HERO ───{%- endcomment -%}

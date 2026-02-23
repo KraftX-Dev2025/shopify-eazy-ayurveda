@@ -5,3 +5,12 @@ compatibility_flags = ["nodejs_compat"]
 
 [observability]
 enabled = true
+
+[[unsafe.bindings]]
+type = "ratelimit"
+name = "EA_RATE_LIMITER"
+namespace_id = "1001"
+
+[unsafe.bindings.simple]
+limit = 10
+period = 60
