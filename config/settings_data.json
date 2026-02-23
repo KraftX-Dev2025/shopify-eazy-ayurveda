@@ -9,6 +9,8 @@
  */
 {
   "current": {
+    "ea_claude_proxy_url": "https://eazy-ayurveda-claude-proxy.hello-brightsolutions.workers.dev",
+    "ea_claude_api_key": "",
     "logo": "shopify://shop_images/1.png",
     "logo_inverse": "shopify://shop_images/1.png",
     "logo_height": 45,
