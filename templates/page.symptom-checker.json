@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "symptom_checker_ea": {
+      "type": "page-symptom-checker",
+      "settings": {}
+    }
+  },
+  "order": [
+    "symptom_checker_ea"
+  ]
+}

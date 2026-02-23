@@ -1,0 +1,449 @@
+
+{%- comment -%}
+  Dosha Quiz — Eazy Ayurveda
+  5-question quiz scoring Vata / Pitta / Kapha.
+  Fully client-side — no API call needed.
+{%- endcomment -%}
+
+{%- comment -%}─── HERO ───{%- endcomment -%}
+<div class="ea-dq-hero" id="ea-dq-hero">
+  <div class="ea-dq-hero__inner">
+    <p class="ea-dq-hero__eyebrow">Ancient Ayurvedic Science</p>
+    <h1 class="ea-dq-hero__heading">Discover Your Dosha</h1>
+    <p class="ea-dq-hero__sub">A 5-question Ayurvedic body type assessment</p>
+    <button class="ea-dq-start-btn" id="ea-dq-start" type="button">
+      Start Quiz
+      <span aria-hidden="true"> →</span>
+    </button>
+  </div>
+</div>
+
+{%- comment -%}─── QUIZ CONTAINER ───{%- endcomment -%}
+<div class="ea-dq-quiz" id="ea-dq-quiz" aria-hidden="true">
+  <div class="ea-dq-quiz__inner">
+
+    {%- comment -%} Progress bar {%- endcomment -%}
+    <div class="ea-dq-progress-wrap" aria-label="Quiz progress">
+      <div class="ea-dq-progress-bar">
+        <div class="ea-dq-progress-fill" id="ea-dq-progress-fill"></div>
+      </div>
+      <p class="ea-dq-progress-label" id="ea-dq-progress-label">Step 1 of 5</p>
+    </div>
+
+    {%- comment -%} Question slide ─── filled by JS {%- endcomment -%}
+    <div class="ea-dq-slide" id="ea-dq-slide">
+      <h2 class="ea-dq-question" id="ea-dq-question"></h2>
+      <div class="ea-dq-options" id="ea-dq-options" role="radiogroup"></div>
+      <button class="ea-dq-next-btn" id="ea-dq-next" type="button" disabled>
+        Next
+      </button>
+    </div>
+
+  </div>
+</div>
+
+{%- comment -%}─── RESULTS ───{%- endcomment -%}
+<div class="ea-dq-result" id="ea-dq-result" aria-hidden="true">
+  <div class="ea-dq-result__inner">
+    <p class="ea-dq-result__label">Your Ayurvedic Body Type</p>
+    <div class="ea-dq-dosha-name" id="ea-dq-dosha-name"></div>
+    <p class="ea-dq-dosha-desc" id="ea-dq-dosha-desc"></p>
+
+    <div class="ea-dq-products" id="ea-dq-products">
+      <p class="ea-dq-products__label">Your Recommended Products</p>
+      <div class="ea-dq-products__grid" id="ea-dq-products-grid"></div>
+    </div>
+
+    <div class="ea-dq-actions">
+      <a
+        id="ea-dq-whatsapp"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="ea-dq-btn ea-dq-btn--wa"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.553 4.122 1.52 5.855L.057 23.882l6.185-1.622A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.011-1.378l-.358-.213-3.72.976.993-3.619-.234-.372A9.818 9.818 0 112 12 9.82 9.82 0 0112 21.818z"/>
+        </svg>
+        Share My Dosha
+      </a>
+      <button
+        id="ea-dq-retake"
+        class="ea-dq-btn ea-dq-btn--retake"
+        type="button"
+      >
+        Retake Quiz
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'dosha-quiz.js' | asset_url }}" defer></script>
+
+{% stylesheet %}
+  /* ─── HERO ─── */
+  .ea-dq-hero {
+    background-color: #fdf8f2;
+    padding-block: 6rem;
+    padding-inline: 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(26, 58, 42, 0.1);
+  }
+
+  .ea-dq-hero__inner {
+    max-width: 560px;
+    margin-inline: auto;
+  }
+
+  .ea-dq-hero__eyebrow {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #5a6a5e;
+    margin-block-start: 0;
+    margin-block-end: 1.25rem;
+  }
+
+  .ea-dq-hero__heading {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 400;
+    color: #1a3a2a;
+    line-height: 1.05;
+    letter-spacing: 0.03em;
+    margin-block-start: 0;
+    margin-block-end: 0.75rem;
+  }
+
+  .ea-dq-hero__sub {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    color: #6b7c70;
+    line-height: 1.7;
+    margin-block-start: 0;
+    margin-block-end: 2.5rem;
+  }
+
+  .ea-dq-start-btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    background-color: #1a3a2a;
+    color: #f5f0e8;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+  }
+
+  .ea-dq-start-btn:hover {
+    background-color: #2d5016;
+  }
+
+  /* ─── QUIZ CONTAINER ─── */
+  .ea-dq-quiz {
+    background-color: #ffffff;
+    padding-block: 3rem 5rem;
+    padding-inline: 1.5rem;
+  }
+
+  .ea-dq-quiz[aria-hidden="true"] {
+    display: none;
+  }
+
+  .ea-dq-quiz__inner {
+    max-width: 640px;
+    margin-inline: auto;
+  }
+
+  /* ─── PROGRESS ─── */
+  .ea-dq-progress-wrap {
+    margin-block-end: 3rem;
+  }
+
+  .ea-dq-progress-bar {
+    height: 4px;
+    background-color: #e8f0ea;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-block-end: 0.6rem;
+  }
+
+  .ea-dq-progress-fill {
+    height: 100%;
+    background-color: #1a3a2a;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    width: 20%;
+  }
+
+  .ea-dq-progress-label {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #5a6a5e;
+    margin: 0;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── SLIDE ─── */
+  .ea-dq-slide {
+    animation: ea-slide-in 0.35s ease both;
+  }
+
+  @keyframes ea-slide-in {
+    from { opacity: 0; transform: translateX(24px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .ea-dq-question {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-weight: 400;
+    color: #1a3a2a;
+    line-height: 1.3;
+    margin-block-start: 0;
+    margin-block-end: 2rem;
+  }
+
+  /* ─── OPTIONS ─── */
+  .ea-dq-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-block-end: 2.5rem;
+  }
+
+  .ea-dq-option {
+    padding: 1.1rem 1.25rem;
+    border: 1.5px solid rgba(26, 58, 42, 0.18);
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: #2a3d30;
+    line-height: 1.5;
+    background-color: #fdfcf9;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+    text-align: left;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+  }
+
+  .ea-dq-option:hover {
+    border-color: rgba(26, 58, 42, 0.45);
+    background-color: #f5faf6;
+  }
+
+  .ea-dq-option--selected {
+    border-color: #1a3a2a;
+    background-color: #f0f7f2;
+    font-weight: 400;
+  }
+
+  /* ─── NEXT BUTTON ─── */
+  .ea-dq-next-btn {
+    display: block;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background-color: #1a3a2a;
+    color: #f5f0e8;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.25s ease, opacity 0.25s ease;
+  }
+
+  .ea-dq-next-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .ea-dq-next-btn:not(:disabled):hover {
+    background-color: #2d5016;
+  }
+
+  /* ─── RESULTS ─── */
+  .ea-dq-result {
+    padding-block: 5rem;
+    padding-inline: 1.5rem;
+    text-align: center;
+  }
+
+  .ea-dq-result[aria-hidden="true"] {
+    display: none;
+  }
+
+  .ea-dq-result--vata  { background-color: #1a1650; }
+  .ea-dq-result--pitta { background-color: #5a1010; }
+  .ea-dq-result--kapha { background-color: #1a3a2a; }
+
+  .ea-dq-result__inner {
+    max-width: 680px;
+    margin-inline: auto;
+  }
+
+  .ea-dq-result__label {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 232, 0.55);
+    margin-block-start: 0;
+    margin-block-end: 1.25rem;
+  }
+
+  .ea-dq-dosha-name {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 400;
+    color: #f5f0e8;
+    line-height: 1;
+    letter-spacing: 0.03em;
+    margin-block-end: 1.5rem;
+  }
+
+  .ea-dq-dosha-desc {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    color: rgba(245, 240, 232, 0.78);
+    line-height: 1.8;
+    max-width: 520px;
+    margin-inline: auto;
+    margin-block-start: 0;
+    margin-block-end: 3rem;
+  }
+
+  /* ─── PRODUCT CARDS ─── */
+  .ea-dq-products {
+    margin-block-end: 3rem;
+  }
+
+  .ea-dq-products__label {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 232, 0.55);
+    margin-block-start: 0;
+    margin-block-end: 1.5rem;
+  }
+
+  .ea-dq-products__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .ea-dq-prod-card {
+    background-color: rgba(245, 240, 232, 0.08);
+    border: 1px solid rgba(245, 240, 232, 0.2);
+    border-radius: 10px;
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+  }
+
+  .ea-dq-prod-card__icon {
+    font-size: 2rem;
+    margin-block-end: 0.5rem;
+    display: block;
+  }
+
+  .ea-dq-prod-card__name {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #f5f0e8;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  /* ─── ACTION BUTTONS ─── */
+  .ea-dq-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .ea-dq-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 2rem;
+    border-radius: 6px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    border: none;
+  }
+
+  .ea-dq-btn--wa {
+    background-color: #25d366;
+    color: #ffffff;
+  }
+
+  .ea-dq-btn--retake {
+    background-color: transparent;
+    color: rgba(245, 240, 232, 0.7);
+    border: 1.5px solid rgba(245, 240, 232, 0.3);
+  }
+
+  .ea-dq-btn:hover { opacity: 0.85; }
+
+  /* ─── RESPONSIVE ─── */
+  @media screen and (max-width: 749px) {
+    .ea-dq-hero { padding-block: 4rem; }
+    .ea-dq-result { padding-block: 4rem; }
+
+    .ea-dq-products__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ea-dq-actions {
+      width: 100%;
+    }
+
+    .ea-dq-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Dosha Quiz",
+  "tag": "div",
+  "class": "ea-dosha-quiz-page",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Dosha Quiz"
+    }
+  ]
+}
+{% endschema %}

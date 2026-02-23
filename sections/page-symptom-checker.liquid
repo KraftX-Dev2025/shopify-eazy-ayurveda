@@ -1,0 +1,400 @@
+
+{%- comment -%}
+  Symptom Checker — Eazy Ayurveda
+  Calls Claude API via a proxy URL set in Theme Settings → AI Features.
+{%- endcomment -%}
+
+<script>
+  window.eaProxyUrl  = {{ settings.ea_claude_proxy_url | default: '' | json }};
+  window.eaApiKey   = {{ settings.ea_claude_api_key    | default: '' | json }};
+</script>
+
+{%- comment -%}─── HERO ───{%- endcomment -%}
+<div class="ea-sc-hero">
+  <div class="ea-sc-hero__content">
+    <p class="ea-sc-hero__eyebrow">AI-Powered Ayurvedic Guidance</p>
+    <h1 class="ea-sc-hero__heading">Find Your Remedy</h1>
+    <p class="ea-sc-hero__sub">
+      Describe your symptoms — our Ayurvedic AI will recommend the right product for you.
+    </p>
+  </div>
+</div>
+
+{%- comment -%}─── CHECKER CARD ───{%- endcomment -%}
+<div class="ea-sc-wrap">
+  <div class="ea-sc-card" id="ea-sc-card">
+
+    {%- comment -%} Input state {%- endcomment -%}
+    <div id="ea-sc-input" class="ea-sc-state ea-sc-state--active">
+      <label class="ea-sc-label" for="ea-sc-textarea">
+        How are you feeling today?
+      </label>
+      <textarea
+        id="ea-sc-textarea"
+        class="ea-sc-textarea"
+        rows="5"
+        placeholder="Tell us how you're feeling... e.g. I have acidity and bloating after meals"
+        maxlength="400"
+      ></textarea>
+      <p class="ea-sc-char-hint"><span id="ea-sc-charcount">0</span>/400</p>
+      <button id="ea-sc-submit" class="ea-sc-btn" type="button">
+        Get Ayurvedic Recommendation
+      </button>
+      <p class="ea-sc-disclaimer">
+        For wellness guidance only. Not a substitute for medical advice.
+      </p>
+    </div>
+
+    {%- comment -%} Loading state {%- endcomment -%}
+    <div id="ea-sc-loading" class="ea-sc-state" aria-live="polite">
+      <div class="ea-sc-lotus" aria-hidden="true">🪷</div>
+      <p class="ea-sc-loading-text">Consulting Ayurvedic wisdom&hellip;</p>
+    </div>
+
+    {%- comment -%} Results state {%- endcomment -%}
+    <div id="ea-sc-result" class="ea-sc-state" aria-live="polite">
+      <p class="ea-sc-result-label">Your Ayurvedic Recommendation</p>
+      <h2 class="ea-sc-product-name" id="ea-sc-product-name"></h2>
+      <p class="ea-sc-why" id="ea-sc-why"></p>
+      <div class="ea-sc-dosage-box">
+        <span class="ea-sc-dosage-icon" aria-hidden="true">🌿</span>
+        <p class="ea-sc-dosage" id="ea-sc-dosage"></p>
+      </div>
+      <a href="/collections/all" class="ea-sc-btn ea-sc-btn--result">Shop Now</a>
+      <button id="ea-sc-retry" class="ea-sc-retry" type="button">Try Again</button>
+    </div>
+
+    {%- comment -%} Error state {%- endcomment -%}
+    <div id="ea-sc-error" class="ea-sc-state" aria-live="assertive">
+      <div class="ea-sc-error-icon" aria-hidden="true">⚠️</div>
+      <p class="ea-sc-error-msg" id="ea-sc-error-msg">Something went wrong. Please try again.</p>
+      <button id="ea-sc-error-retry" class="ea-sc-btn" type="button" style="margin-top:1.5rem;">Try Again</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="{{ 'symptom-checker.js' | asset_url }}" defer></script>
+
+{% stylesheet %}
+  /* ─── HERO ─── */
+  .ea-sc-hero {
+    background-color: #1a3a2a;
+    padding-block: 5rem 4.5rem;
+    padding-inline: 1.5rem;
+    text-align: center;
+  }
+
+  .ea-sc-hero__content {
+    max-width: 660px;
+    margin-inline: auto;
+  }
+
+  .ea-sc-hero__eyebrow {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 232, 0.55);
+    margin-block-start: 0;
+    margin-block-end: 1.25rem;
+  }
+
+  .ea-sc-hero__heading {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 400;
+    color: #f5f0e8;
+    line-height: 1.05;
+    letter-spacing: 0.03em;
+    margin-block-start: 0;
+    margin-block-end: 1rem;
+  }
+
+  .ea-sc-hero__sub {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    color: rgba(245, 240, 232, 0.75);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* ─── WRAP + CARD ─── */
+  .ea-sc-wrap {
+    background-color: #fdf8f2;
+    padding-block: 4rem 6rem;
+    padding-inline: 1.5rem;
+  }
+
+  .ea-sc-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 32px rgba(26, 58, 42, 0.1);
+    max-width: 600px;
+    margin-inline: auto;
+    padding: 2.75rem 2.5rem 3rem;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* ─── STATE VISIBILITY ─── */
+  .ea-sc-state {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .ea-sc-state--active {
+    display: flex;
+  }
+
+  /* ─── INPUT STATE ─── */
+  .ea-sc-label {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #1a3a2a;
+    margin-block-end: 1rem;
+    display: block;
+  }
+
+  .ea-sc-textarea {
+    width: 100%;
+    padding: 1rem 1.1rem;
+    border: 1.5px solid rgba(26, 58, 42, 0.2);
+    border-radius: 8px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: #2a3d30;
+    background-color: #fdfcf9;
+    resize: vertical;
+    line-height: 1.6;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  .ea-sc-textarea:focus {
+    outline: none;
+    border-color: #1a3a2a;
+  }
+
+  .ea-sc-textarea::placeholder {
+    color: #aab4ae;
+  }
+
+  .ea-sc-char-hint {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.72rem;
+    color: #aab4ae;
+    text-align: right;
+    margin-block-start: 0.35rem;
+    margin-block-end: 1.5rem;
+  }
+
+  /* ─── BUTTON ─── */
+  .ea-sc-btn {
+    display: block;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background-color: #1a3a2a;
+    color: #f5f0e8;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.25s ease;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .ea-sc-btn:hover {
+    background-color: #2d5016;
+  }
+
+  .ea-sc-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .ea-sc-disclaimer {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.7rem;
+    color: #aab4ae;
+    text-align: center;
+    margin-block-start: 1rem;
+    margin-block-end: 0;
+  }
+
+  /* ─── LOADING STATE ─── */
+  #ea-sc-loading {
+    align-items: center;
+    gap: 1.5rem;
+    padding-block: 2rem;
+  }
+
+  .ea-sc-lotus {
+    font-size: 3.5rem;
+    animation: ea-spin 2s linear infinite;
+    display: block;
+    line-height: 1;
+  }
+
+  @keyframes ea-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  .ea-sc-loading-text {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 400;
+    font-style: italic;
+    color: #1a3a2a;
+    margin: 0;
+  }
+
+  /* ─── RESULTS STATE ─── */
+  #ea-sc-result {
+    gap: 0;
+  }
+
+  .ea-sc-result-label {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #5a6a5e;
+    margin-block-start: 0;
+    margin-block-end: 0.75rem;
+  }
+
+  .ea-sc-product-name {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 500;
+    color: #1a3a2a;
+    line-height: 1.2;
+    margin-block-start: 0;
+    margin-block-end: 0.75rem;
+  }
+
+  .ea-sc-product-name::before {
+    content: '🌿 ';
+  }
+
+  .ea-sc-why {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: #4a5a50;
+    line-height: 1.6;
+    margin-block-start: 0;
+    margin-block-end: 1.5rem;
+  }
+
+  .ea-sc-dosage-box {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    background-color: #f0f7f2;
+    border-left: 3px solid #1a3a2a;
+    border-radius: 0 6px 6px 0;
+    padding: 0.9rem 1rem;
+    margin-block-end: 1.75rem;
+  }
+
+  .ea-sc-dosage-icon {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    flex-shrink: 0;
+  }
+
+  .ea-sc-dosage {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.88rem;
+    font-weight: 400;
+    color: #2a3d30;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .ea-sc-btn--result {
+    margin-block-end: 1rem;
+  }
+
+  .ea-sc-retry {
+    background: none;
+    border: none;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.8rem;
+    color: #5a6a5e;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    text-align: center;
+  }
+
+  .ea-sc-retry:hover {
+    color: #1a3a2a;
+  }
+
+  /* ─── ERROR STATE ─── */
+  #ea-sc-error {
+    align-items: center;
+    gap: 1rem;
+    padding-block: 1.5rem;
+    text-align: center;
+  }
+
+  .ea-sc-error-icon {
+    font-size: 2.5rem;
+    line-height: 1;
+  }
+
+  .ea-sc-error-msg {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.95rem;
+    color: #6b7c70;
+    line-height: 1.6;
+    max-width: 380px;
+    margin: 0;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media screen and (max-width: 749px) {
+    .ea-sc-card {
+      padding: 2rem 1.5rem 2.5rem;
+    }
+
+    .ea-sc-hero {
+      padding-block: 3.5rem 3rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Symptom Checker",
+  "tag": "div",
+  "class": "ea-symptom-checker-page",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Symptom Checker"
+    }
+  ]
+}
+{% endschema %}

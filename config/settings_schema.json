@@ -2284,5 +2284,26 @@
         "default": "equal-width-buttons"
       }
     ]
+  },
+  {
+    "name": "AI Features",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Power the Symptom Checker with Claude AI. Deploy a free Cloudflare Worker proxy (instructions in assets/symptom-checker.js) and paste its URL below. Alternatively paste your Anthropic API key directly — note the key will be visible in page source."
+      },
+      {
+        "type": "text",
+        "id": "ea_claude_proxy_url",
+        "label": "Claude Proxy URL",
+        "info": "Recommended. Your Cloudflare Worker or serverless proxy URL."
+      },
+      {
+        "type": "text",
+        "id": "ea_claude_api_key",
+        "label": "Claude API Key (dev only)",
+        "info": "⚠️ Visible in page source. Use proxy URL for production."
+      }
+    ]
   }
 ]

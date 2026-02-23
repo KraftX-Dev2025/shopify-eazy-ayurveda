@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "dosha_quiz_ea": {
+      "type": "page-dosha-quiz",
+      "settings": {}
+    }
+  },
+  "order": [
+    "dosha_quiz_ea"
+  ]
+}
