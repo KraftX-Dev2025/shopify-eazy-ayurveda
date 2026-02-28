@@ -33,12 +33,14 @@
     <div class="ea-about-story__media">
       {% if section.settings.story_image %}
         {{ section.settings.story_image
-          | image_url: width: 800
+          | image_url: width: 1200
           | image_tag:
             class: 'ea-about-story__img',
             alt: 'Our Story — Eazy Ayurveda',
-            width: 800,
-            height: 1000,
+            widths: '400, 600, 800, 1000, 1200',
+            sizes: '(min-width: 990px) calc(50vw - 4rem), 100vw',
+            width: section.settings.story_image.width,
+            height: section.settings.story_image.height,
             loading: 'lazy'
         }}
       {% else %}
@@ -219,10 +221,11 @@
 
   .ea-about-story__img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 10px;
+    height: auto;
     aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 10px;
     display: block;
   }
 

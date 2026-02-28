@@ -24,12 +24,14 @@
               <a href="{{ product.url }}" class="ea-bs-card__img-link" tabindex="-1" aria-hidden="true">
                 {% if product.featured_image %}
                   {{ product.featured_image
-                    | image_url: width: 500
+                    | image_url: width: 800
                     | image_tag:
                       class: 'ea-bs-card__img',
                       alt: product.featured_image.alt | default: product.title,
-                      width: 500,
-                      height: 500,
+                      widths: '220, 360, 520, 800',
+                      sizes: '(min-width: 750px) 260px, 220px',
+                      width: product.featured_image.width,
+                      height: product.featured_image.height,
                       loading: 'lazy'
                   }}
                 {% else %}
@@ -186,6 +188,8 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
+    display: block;
     transition: transform 0.4s ease;
   }
 
